@@ -50,6 +50,10 @@ Future<void> initAuth() async {
 }
 
 Future<void> enrol(String username, String password) async {
+  if (RegExp('[^a-zA-Z0-9_]').hasMatch(username)) {
+    throw AuthException(
+        'Username can only contain upper or lowercase letters, whole numbers, or underscores.');
+  }
   // TODO: Add username and password conditions.
   if (_users.indexWhere(
           (e) => e.username.toLowerCase() == username.toLowerCase()) !=
