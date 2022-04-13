@@ -26,8 +26,8 @@ class CredentialPage extends StatelessWidget {
         _createTextField(_usernameController, 'Username'),
         _createTextField(_passwordController, 'Password'),
         ElevatedButton(
-            onPressed: () =>
-                onSubmitted(_usernameController.text, _passwordController.text),
+            onPressed: (() => onSubmitted(
+                _usernameController.text, _passwordController.text)),
             child: const Text('Submit'))
       ],
     ));
