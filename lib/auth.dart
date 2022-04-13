@@ -27,14 +27,15 @@ class _User {
 
   Future<void> generateHash(String password) async {
     _salt = await FlutterBcrypt.salt();
-    //final saltAndPepper = r'$2b$06$' + _salt + _pepper;
+    final saltAndPepper = _salt + _pepper;
 
-    _hash = await FlutterBcrypt.hashPw(password: password, salt: _salt);
+    _hash = await FlutterBcrypt.hashPw(password: password, salt: saltAndPepper);
   }
 
   Future<void> login(String password) async {
-    //final saltAndPepper = r'$2b$06$' + _salt + _pepper;
-    final hash = await FlutterBcrypt.hashPw(password: password, salt: _salt);
+    final saltAndPepper = _salt + _pepper;
+    final hash =
+        await FlutterBcrypt.hashPw(password: password, salt: saltAndPepper);
     if (_hash == hash) {
       generateHash(password);
     } else {
