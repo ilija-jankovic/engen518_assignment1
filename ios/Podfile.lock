@@ -1,0 +1,35 @@
+PODS:
+  - BCryptSwift (1.1)
+  - Flutter (1.0.0)
+  - flutter_bcrypt (0.0.1):
+    - BCryptSwift (~> 1.1)
+    - Flutter
+  - local_auth (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - flutter_bcrypt (from `.symlinks/plugins/flutter_bcrypt/ios`)
+  - local_auth (from `.symlinks/plugins/local_auth/ios`)
+
+SPEC REPOS:
+  trunk:
+    - BCryptSwift
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  flutter_bcrypt:
+    :path: ".symlinks/plugins/flutter_bcrypt/ios"
+  local_auth:
+    :path: ".symlinks/plugins/local_auth/ios"
+
+SPEC CHECKSUMS:
+  BCryptSwift: f69992ea5685f6714260842c2770688043b89ab2
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_bcrypt: 8ae63c682225f69d9981465509cb26b9e93522ef
+  local_auth: 1740f55d7af0a2e2a8684ce225fe79d8931e808c
+
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+
+COCOAPODS: 1.11.2
