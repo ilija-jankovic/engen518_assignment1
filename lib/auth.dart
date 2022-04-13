@@ -51,14 +51,17 @@ Future<void> initAuth() async {
 }
 
 Future<void> enrol(String username, String password) async {
+  if (_users.indexWhere((e) => e.username == username) != -1) {
+    throw AuthException("User with username '$username' already exists.");
+  }
+  // TODO: Add username and password conditions.
+
   if (_canCheckBiometrics &&
       !await _localAuth.authenticate(
           localizedReason: 'Please authenticate with your face or fingerprint.',
           biometricOnly: true)) {
     throw AuthException('Could not recognise your face or fingerprint.');
   }
-
-  // TODO: Add username and password conditions.
 
   final user = (_users..add(_User(username: username))).last;
   await user.generateHash(password);
@@ -68,7 +71,7 @@ Future<void> verify(String username, String password) async {
   final user = _users.firstWhere(
     (e) => e.username == username,
     orElse: () =>
-        throw AuthException('Could not find user with username $username.'),
+        throw AuthException("Could not find user with username '$username'."),
   );
   return user.login(password);
 }
