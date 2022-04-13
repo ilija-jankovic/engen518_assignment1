@@ -1,5 +1,6 @@
 import 'package:engen518_assignment1/themed_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CredentialPage extends StatelessWidget {
   final _usernameController = TextEditingController();
@@ -13,6 +14,9 @@ class CredentialPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: TextField(
           controller: controller,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9_]'))
+          ],
           decoration: InputDecoration(label: Text(label))),
     );
   }

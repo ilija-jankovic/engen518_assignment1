@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 
@@ -51,10 +50,12 @@ Future<void> initAuth() async {
 }
 
 Future<void> enrol(String username, String password) async {
-  if (_users.indexWhere((e) => e.username == username) != -1) {
+  // TODO: Add username and password conditions.
+  if (_users.indexWhere(
+          (e) => e.username.toLowerCase() == username.toLowerCase()) !=
+      -1) {
     throw AuthException("User with username '$username' already exists.");
   }
-  // TODO: Add username and password conditions.
 
   if (_canCheckBiometrics &&
       !await _localAuth.authenticate(
