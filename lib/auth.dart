@@ -76,7 +76,7 @@ Future<void> initAuth() async {
   _canCheckBiometrics = await _localAuth.canCheckBiometrics;
 }
 
-Future<void> enrol(String username, String password) async {
+void _checkGenericCredentialConditions(String username, String password) {
   if (username.isEmpty) {
     throw AuthException('Username cannot be empty.');
   }
@@ -91,18 +91,6 @@ Future<void> enrol(String username, String password) async {
         'Username can only contain upper or lowercase letters, `whole numbers, or underscores.');
   }
 
-  final profanity = getProfanity(username);
-  if (profanity != null) {
-    throw AuthException(
-        "Username cannot contain profanity. Found '$profanity'.");
-  }
-
-  if (_users.indexWhere(
-          (e) => e.username.toLowerCase() == username.toLowerCase()) !=
-      -1) {
-    throw AuthException("User with username '$username' already exists.");
-  }
-
   if (password.length < 8) {
     throw AuthException('Password must be at least 8 characters long.');
   }
@@ -110,6 +98,22 @@ Future<void> enrol(String username, String password) async {
   if (password.length > 64) {
     throw AuthException(
         'Password is above the maximum length of 64 characters.');
+  }
+}
+
+Future<void> enrol(String username, String password) async {
+  _checkGenericCredentialConditions(username, password);
+
+  if (_users.indexWhere(
+          (e) => e.username.toLowerCase() == username.toLowerCase()) !=
+      -1) {
+    throw AuthException("User with username '$username' already exists.");
+  }
+
+  final profanity = getProfanity(username);
+  if (profanity != null) {
+    throw AuthException(
+        "Username cannot contain profanity. Found '$profanity'.");
   }
 
   if (isCommon(password)) {
@@ -124,11 +128,14 @@ Future<void> enrol(String username, String password) async {
 }
 
 Future<void> verify(String username, String password) async {
+  _checkGenericCredentialConditions(username, password);
+
   final user = _users.firstWhere(
     (e) => e.username == username,
     orElse: () =>
         throw AuthException("Could not find user with username '$username'."),
   );
+
   return user.login(password);
 }
 
