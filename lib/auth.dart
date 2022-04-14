@@ -80,3 +80,12 @@ Future<void> verify(String username, String password) async {
   );
   return user.login(password);
 }
+
+List<List<String>> getUserData() {
+  return _users.map((e) => [e.username, e._salt, e._hash].toList()).toList()
+    ..insert(0, [
+      'Username',
+      'Salt',
+      'Hash',
+    ]);
+}

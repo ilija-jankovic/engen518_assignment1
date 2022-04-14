@@ -60,7 +60,25 @@ class LoginPage extends StatelessWidget {
       children: [
         _createButton('Sign In', () => _handleSubmission(context, verify)),
         _createButton('Sign Up', () => _handleSubmission(context, enrol)),
-        _createButton('Display Private User Data', () {})
+        _createButton('Display Private User Data', () {
+          final data = getUserData();
+          final dialog = AlertDialog(
+              title: const Text('Private User Data'),
+              content: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: data
+                        .map((e) => FittedBox(
+                            child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: e
+                                    .map((e) => SizedBox(
+                                        height: 50, width: 200, child: Text(e)))
+                                    .toList())))
+                        .toList()),
+              ));
+          showDialog(context: context, builder: (context) => dialog);
+        })
       ],
     ));
   }
