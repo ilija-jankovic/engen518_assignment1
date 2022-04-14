@@ -9,8 +9,8 @@ import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 late final bool _canCheckBiometrics;
 final _localAuth = LocalAuthentication();
 
-const _pepper =
-    '64charlongpepper64charlongpepper64charlongpepper64charlongpepper64charlongpepper64charlongpepper';
+// Pepper is over 112 bits as suggested by NIST.
+const _pepper = 'donthackmedonthackmedonthackmedonthackmedonthackmedonthackme';
 
 /// Adapted custom Exception solution from: https://stackoverflow.com/questions/13579982/how-to-create-a-custom-exception-and-handle-it-in-dart
 class AuthException implements Exception {
