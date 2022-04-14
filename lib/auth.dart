@@ -23,6 +23,15 @@ class AuthException implements Exception {
   }
 }
 
+Future<void> _checkBiometrics() async {
+  if (_canCheckBiometrics &&
+      !await _localAuth.authenticate(
+          localizedReason: 'Please authenticate with your face or fingerprint.',
+          biometricOnly: true)) {
+    throw AuthException('Could not recognise your face or fingerprint.');
+  }
+}
+
 class _User {
   final String username;
   late String _salt, _hash;
@@ -43,6 +52,8 @@ class _User {
       throw AuthException(
           "Account with username '$username' has been locked due to too many unsuccessful login attempts.");
     }
+
+    await _checkBiometrics();
 
     final saltAndPepper = _salt + _pepper;
     final hash =
@@ -106,12 +117,7 @@ Future<void> enrol(String username, String password) async {
         "Password '$password' is too common. Please enter a more secure password.");
   }
 
-  if (_canCheckBiometrics &&
-      !await _localAuth.authenticate(
-          localizedReason: 'Please authenticate with your face or fingerprint.',
-          biometricOnly: true)) {
-    throw AuthException('Could not recognise your face or fingerprint.');
-  }
+  await _checkBiometrics();
 
   final user = (_users..add(_User(username: username))).last;
   await user.generateHash(password);
