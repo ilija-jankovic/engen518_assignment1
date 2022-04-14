@@ -26,6 +26,8 @@ class AuthException implements Exception {
 class _User {
   final String username;
   late String _salt, _hash;
+  int unsuccessfulLoginAttempts = 0;
+  static const maxLoginAttempts = 3;
 
   _User({required this.username});
 
@@ -37,13 +39,22 @@ class _User {
   }
 
   Future<void> login(String password) async {
+    if (unsuccessfulLoginAttempts >= maxLoginAttempts) {
+      throw AuthException(
+          "Account with username '$username' has been locked due to too many unsuccessful login attempts.");
+    }
+
     final saltAndPepper = _salt + _pepper;
     final hash =
         await FlutterBcrypt.hashPw(password: password, salt: saltAndPepper);
     if (_hash == hash) {
+      unsuccessfulLoginAttempts = 0;
       generateHash(password);
     } else {
-      throw AuthException('Could not log in.');
+      unsuccessfulLoginAttempts++;
+      final attemptsLeft = maxLoginAttempts - unsuccessfulLoginAttempts;
+      throw AuthException('Could not log in. '
+          '${attemptsLeft > 0 ? '$attemptsLeft login attempt${attemptsLeft != 1 ? 's' : ''} left.' : "Account with username '$username' has been locked."}');
     }
   }
 }
