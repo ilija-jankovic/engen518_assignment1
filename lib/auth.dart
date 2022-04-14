@@ -1,3 +1,7 @@
+/// Password guidelines from NIST 800-63b summaries:
+/// https://www.netsec.news/summary-of-the-nist-password-recommendations-for-2021/
+/// https://www.auditboard.com/blog/nist-password-guidelines/
+
 import 'package:engen518_assignment1/word_lists.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_bcrypt/flutter_bcrypt.dart';
@@ -50,8 +54,16 @@ Future<void> initAuth() async {
   _canCheckBiometrics = await _localAuth.canCheckBiometrics;
 }
 
-// Password guidelines from NIST 800-63b summary: https://www.netsec.news/summary-of-the-nist-password-recommendations-for-2021/
 Future<void> enrol(String username, String password) async {
+  if (username.isEmpty) {
+    throw AuthException('Username cannot be empty.');
+  }
+
+  // Arbitrary usernmae limit for greater user experience.
+  if (username.length > 32) {
+    throw AuthException('Username cannot be more than 32 characters long.');
+  }
+
   if (RegExp('[^a-zA-Z0-9_]').hasMatch(username)) {
     throw AuthException(
         'Username can only contain upper or lowercase letters, `whole numbers, or underscores.');
@@ -63,11 +75,14 @@ Future<void> enrol(String username, String password) async {
         "Username cannot contain profanity. Found '$profanity'.");
   }
 
-  // TODO: Add username and password conditions.
   if (_users.indexWhere(
           (e) => e.username.toLowerCase() == username.toLowerCase()) !=
       -1) {
     throw AuthException("User with username '$username' already exists.");
+  }
+
+  if (password.length < 8) {
+    throw AuthException('Password must be at least 8 characters long.');
   }
 
   if (password.length > 64) {
@@ -76,7 +91,8 @@ Future<void> enrol(String username, String password) async {
   }
 
   if (isCommon(password)) {
-    throw AuthException("Password '$password' is too common. Please enter a more secure password.");
+    throw AuthException(
+        "Password '$password' is too common. Please enter a more secure password.");
   }
 
   if (_canCheckBiometrics &&
