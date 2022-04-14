@@ -1,4 +1,4 @@
-import 'package:engen518_assignment1/profanity_checker.dart';
+import 'package:engen518_assignment1/word_lists.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 
@@ -50,10 +50,11 @@ Future<void> initAuth() async {
   _canCheckBiometrics = await _localAuth.canCheckBiometrics;
 }
 
+// Password guidelines from NIST 800-63b summary: https://www.netsec.news/summary-of-the-nist-password-recommendations-for-2021/
 Future<void> enrol(String username, String password) async {
   if (RegExp('[^a-zA-Z0-9_]').hasMatch(username)) {
     throw AuthException(
-        'Username can only contain upper or lowercase letters, whole numbers, or underscores.');
+        'Username can only contain upper or lowercase letters, `whole numbers, or underscores.');
   }
 
   final profanity = getProfanity(username);
@@ -67,6 +68,11 @@ Future<void> enrol(String username, String password) async {
           (e) => e.username.toLowerCase() == username.toLowerCase()) !=
       -1) {
     throw AuthException("User with username '$username' already exists.");
+  }
+
+  if (password.length > 64) {
+    throw AuthException(
+        'Password is above the maximum length of 64 characters.');
   }
 
   if (_canCheckBiometrics &&
