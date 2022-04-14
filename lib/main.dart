@@ -1,4 +1,5 @@
 import 'package:engen518_assignment1/credential_page.dart';
+import 'package:engen518_assignment1/profanity_checker.dart';
 import 'package:engen518_assignment1/success_page.dart';
 import 'package:engen518_assignment1/themed_scaffold.dart';
 import 'package:engen518_assignment1/auth.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAuth();
+  await initProfanityChecker();
   runApp(const MaterialApp(home: LoginPage()));
 }
 

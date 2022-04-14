@@ -1,3 +1,4 @@
+import 'package:engen518_assignment1/profanity_checker.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 
@@ -54,6 +55,13 @@ Future<void> enrol(String username, String password) async {
     throw AuthException(
         'Username can only contain upper or lowercase letters, whole numbers, or underscores.');
   }
+
+  final profanity = getProfanity(username);
+  if (profanity != null) {
+    throw AuthException(
+        "Username cannot contain profanity. Found '$profanity'.");
+  }
+
   // TODO: Add username and password conditions.
   if (_users.indexWhere(
           (e) => e.username.toLowerCase() == username.toLowerCase()) !=
