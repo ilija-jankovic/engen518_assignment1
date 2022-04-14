@@ -18,6 +18,8 @@ class __PasswordInputState extends State<_PasswordInput> {
     return TextField(
         obscureText: !_passwordVisible,
         controller: widget.controller,
+        maxLength: 64,
+        maxLines: 1,
         decoration: InputDecoration(
             label: const Text('Password'),
             suffixIcon: IconButton(
@@ -48,6 +50,8 @@ class CredentialPage extends StatelessWidget {
               children: [
                 TextField(
                     controller: _usernameController,
+                    maxLines: 1,
+                    maxLength: 32,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9_]'))
                     ],
