@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:engen518_assignment1/auth.dart';
+import 'package:engen518_assignment1/success_page.dart';
 import 'package:engen518_assignment1/themed_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,9 +40,39 @@ class __PasswordInputState extends State<_PasswordInput> {
 class CredentialPage extends StatelessWidget {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  final void Function(String username, String password) onSubmitted;
+  final Future<void> Function(String username, String password) onSubmitted;
 
   CredentialPage({Key? key, required this.onSubmitted}) : super(key: key);
+
+  void _showErrorSnackBar(BuildContext context, String error) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    final snackBar = SnackBar(content: Text(error));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<BuildContext> _showLoadingDialog(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    final dialog = AlertDialog(
+      content:
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+        Padding(
+            padding: EdgeInsets.only(right: 24.0),
+            child: CircularProgressIndicator()),
+        Text('Loading (bcrypt is very slow)...')
+      ]),
+    );
+
+    final completer = Completer<BuildContext>();
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          completer.complete(context);
+          return dialog;
+        });
+
+    return completer.future;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +92,26 @@ class CredentialPage extends StatelessWidget {
                     decoration: const InputDecoration(label: Text('Username'))),
                 _PasswordInput(controller: _passwordController),
                 ElevatedButton(
-                    onPressed: (() => onSubmitted(
-                        _usernameController.text, _passwordController.text)),
+                    onPressed: () async {
+                      final dialogContext = await _showLoadingDialog(context);
+                      try {
+                        await onSubmitted(
+                            _usernameController.text, _passwordController.text);
+                        Navigator.of(dialogContext).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SuccessPage()));
+                      } on AuthException catch (e) {
+                        Navigator.of(dialogContext).pop();
+                        _showErrorSnackBar(context, e.toString());
+                      } catch (e) {
+                        Navigator.of(dialogContext).pop();
+                        _showErrorSnackBar(context,
+                            'Something went wrong internally. Please try again.');
+                        debugPrint(e.toString());
+                      }
+                    },
                     child: const Text('Submit'))
               ],
             )));
