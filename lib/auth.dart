@@ -49,7 +49,7 @@ class _User {
         await FlutterBcrypt.hashPw(password: password, salt: saltAndPepper);
     if (_hash == hash) {
       unsuccessfulLoginAttempts = 0;
-      generateHash(password);
+      await generateHash(password);
     } else {
       unsuccessfulLoginAttempts++;
       final attemptsLeft = maxLoginAttempts - unsuccessfulLoginAttempts;
