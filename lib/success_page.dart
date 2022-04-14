@@ -7,6 +7,10 @@ class SuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const ThemedScaffold(
-        body: Text('You have sucessfully been logged in.\nWelcome!'));
+        body: Center(
+            child: Text(
+      'You have successfully logged in.\nWelcome!',
+      textAlign: TextAlign.center,
+    )));
   }
 }
