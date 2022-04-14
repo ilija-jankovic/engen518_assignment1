@@ -13,9 +13,9 @@ late List<String> _profanityList, _commonPasswords;
 Future<void> initWordLists() async {
   var data = await rootBundle.loadString('assets/profanity_list.json');
   _profanityList = (jsonDecode(data) as List).cast<String>();
-  _commonPasswords = File('assets/10-million-password-list-top-1000000.txt')
-      .readAsStringSync()
-      .split('\n');
+  data = await rootBundle
+      .loadString('assets/10-million-password-list-top-1000000.txt');
+  _commonPasswords = data.split('\n');
 }
 
 String? getProfanity(String text) {
@@ -26,4 +26,8 @@ String? getProfanity(String text) {
     }
   }
   return null;
+}
+
+bool isCommon(String password) {
+  return _commonPasswords.contains(password);
 }

@@ -75,6 +75,10 @@ Future<void> enrol(String username, String password) async {
         'Password is above the maximum length of 64 characters.');
   }
 
+  if (isCommon(password)) {
+    throw AuthException("Password '$password' is too common. Please enter a more secure password.");
+  }
+
   if (_canCheckBiometrics &&
       !await _localAuth.authenticate(
           localizedReason: 'Please authenticate with your face or fingerprint.',
