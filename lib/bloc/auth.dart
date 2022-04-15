@@ -2,7 +2,7 @@
 /// https://www.netsec.news/summary-of-the-nist-password-recommendations-for-2021/
 /// https://www.auditboard.com/blog/nist-password-guidelines/
 
-import 'package:engen518_assignment1/word_lists.dart';
+import 'package:engen518_assignment1/bloc/word_lists.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 

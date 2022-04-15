@@ -1,4 +1,4 @@
-import 'package:engen518_assignment1/themed_scaffold.dart';
+import 'package:engen518_assignment1/widgets/themed_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class SuccessPage extends StatelessWidget {

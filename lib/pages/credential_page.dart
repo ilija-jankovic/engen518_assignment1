@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:engen518_assignment1/auth.dart';
-import 'package:engen518_assignment1/success_page.dart';
-import 'package:engen518_assignment1/themed_scaffold.dart';
+import 'package:engen518_assignment1/bloc/auth.dart';
+import 'package:engen518_assignment1/pages/success_page.dart';
+import 'package:engen518_assignment1/widgets/themed_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
