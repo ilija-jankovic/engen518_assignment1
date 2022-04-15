@@ -3,6 +3,7 @@
 /// https://www.auditboard.com/blog/nist-password-guidelines/
 
 import 'package:engen518_assignment1/bloc/word_lists.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 
@@ -10,7 +11,15 @@ late final bool _canCheckBiometrics;
 final _localAuth = LocalAuthentication();
 
 // Pepper is over 112 bits as suggested by NIST.
-const _pepper = 'donthackmedonthackmedonthackmedonthackmedonthackmedonthackme';
+late final String _pepper;
+
+final _users = List<_User>.empty(growable: true);
+
+Future<void> initAuth() async {
+  _canCheckBiometrics = await _localAuth.canCheckBiometrics;
+  await dotenv.load(fileName: ".env");
+  _pepper = dotenv.get('PEPPER');
+}
 
 /// Adapted custom Exception solution from: https://stackoverflow.com/questions/13579982/how-to-create-a-custom-exception-and-handle-it-in-dart
 class AuthException implements Exception {
@@ -68,12 +77,6 @@ class _User {
           '${attemptsLeft > 0 ? '$attemptsLeft login attempt${attemptsLeft != 1 ? 's' : ''} left.' : "Account with username '$username' has been locked."}');
     }
   }
-}
-
-final _users = List<_User>.empty(growable: true);
-
-Future<void> initAuth() async {
-  _canCheckBiometrics = await _localAuth.canCheckBiometrics;
 }
 
 void _checkGenericCredentialConditions(String username, String password) {
