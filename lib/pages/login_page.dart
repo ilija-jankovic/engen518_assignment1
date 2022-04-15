@@ -3,8 +3,8 @@ import 'package:engen518_assignment1/pages/credential_page.dart';
 import 'package:engen518_assignment1/widgets/themed_scaffold.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   Widget _createButton(String label, void Function() onPressed) {
     return Padding(

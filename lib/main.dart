@@ -7,5 +7,5 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initAuth();
   await initWordLists();
-  runApp(const MaterialApp(home: LoginPage()));
+  runApp(const MaterialApp(home: HomePage()));
 }
