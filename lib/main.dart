@@ -1,4 +1,4 @@
-import 'package:engen518_assignment1/pages/login_page.dart';
+import 'package:engen518_assignment1/pages/home_page.dart';
 import 'package:engen518_assignment1/bloc/word_lists.dart';
 import 'package:engen518_assignment1/bloc/auth.dart';
 import 'package:flutter/material.dart';
