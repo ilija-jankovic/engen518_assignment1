@@ -3,6 +3,11 @@ import 'package:engen518_assignment1/pages/credential_page.dart';
 import 'package:engen518_assignment1/widgets/themed_scaffold.dart';
 import 'package:flutter/material.dart';
 
+/// Page for navigation to Enrolment or Verification, or to display private user
+/// data for debugging purposes.
+///
+/// Private user data should not be shown in a real application, this is just a
+/// proof-of-concept.
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -15,6 +20,8 @@ class HomePage extends StatelessWidget {
         ]));
   }
 
+  /// Pushes a [CredentialPage] object with [onSubmitted] on the [Navigator]
+  /// stack.
   Future<void> _handleSubmission(BuildContext context,
       Future<void> Function(String, String) onSubmitted) async {
     Navigator.push(
@@ -23,6 +30,8 @@ class HomePage extends StatelessWidget {
             builder: (context) => CredentialPage(onSubmitted: onSubmitted)));
   }
 
+  /// Returns a [Column] of 'Sign In', 'Sign Up', and 'Display Private User
+  /// Data' [ElevatedButton]s.
   @override
   Widget build(BuildContext context) {
     return ThemedScaffold(
@@ -38,6 +47,7 @@ class HomePage extends StatelessWidget {
               content: SingleChildScrollView(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // Displays private user data in a formatted style.
                     children: data
                         .map((e) => FittedBox(
                             child: Container(
