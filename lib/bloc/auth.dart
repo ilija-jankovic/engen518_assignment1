@@ -32,6 +32,9 @@ class AuthException implements Exception {
   }
 }
 
+/// Checks for Face or Touch ID if enabled on the device.
+///
+/// Proof of concept for two-factor authentication.
 Future<void> _checkBiometrics() async {
   if (_canCheckBiometrics &&
       !await _localAuth.authenticate(
@@ -41,13 +44,20 @@ Future<void> _checkBiometrics() async {
   }
 }
 
+/// Class containing
 class _User {
+  final int _id;
+  static int _latestUserId = -1;
+
   final String username;
   late String _salt, _hash;
+
   int unsuccessfulLoginAttempts = 0;
   static const maxLoginAttempts = 3;
 
-  _User({required this.username});
+  _User({required this.username}) : _id = _latestUserId + 1 {
+    _latestUserId++;
+  }
 
   Future<void> generateHash(String password) async {
     _salt = await FlutterBcrypt.salt();
@@ -143,8 +153,11 @@ Future<void> verify(String username, String password) async {
 }
 
 List<List<String>> getUserData() {
-  return _users.map((e) => [e.username, e._salt, e._hash].toList()).toList()
+  return _users
+      .map((e) => [e._id.toString(), e.username, e._salt, e._hash].toList())
+      .toList()
     ..insert(0, [
+      'ID',
       'Username',
       'Salt',
       'Hash',

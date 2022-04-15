@@ -40,12 +40,18 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: data
                         .map((e) => FittedBox(
-                            child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: e
-                                    .map((e) => SizedBox(
-                                        height: 50, width: 200, child: Text(e)))
-                                    .toList())))
+                            child: Container(
+                                color: data.indexOf(e) % 2 == 0
+                                    ? Colors.white
+                                    : Colors.grey[200],
+                                child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: e
+                                        .map((e) => SizedBox(
+                                            height: 50,
+                                            width: 200,
+                                            child: Text(e)))
+                                        .toList()))))
                         .toList()),
               ));
           showDialog(context: context, builder: (context) => dialog);
