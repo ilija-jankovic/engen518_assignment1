@@ -99,11 +99,12 @@ class _User {
 
   /// Generates a new [_hash] using bcrypt with [password] and a new random
   /// [_salt] conatenated with [_pepper].
+  ///
+  /// bcrypt with pepper solution from: https://security.stackexchange.com/questions/21263/how-to-apply-a-pepper-correctly-to-bcrypt
   Future<void> generateHash(String password) async {
     _salt = await FlutterBcrypt.salt();
-    final saltAndPepper = _salt + _pepper;
-
-    _hash = await FlutterBcrypt.hashPw(password: password, salt: saltAndPepper);
+    _hash =
+        await FlutterBcrypt.hashPw(password: password + _pepper, salt: _salt);
   }
 
   /// Attempts to log [_User] in with [password].
@@ -124,9 +125,9 @@ class _User {
 
     await _checkBiometrics();
 
-    final saltAndPepper = _salt + _pepper;
+    // Same procedure as generateHash but without storage.
     final hash =
-        await FlutterBcrypt.hashPw(password: password, salt: saltAndPepper);
+        await FlutterBcrypt.hashPw(password: password + _pepper, salt: _salt);
     if (_hash == hash) {
       _unsuccessfulLoginAttempts = 0;
       await generateHash(password);
